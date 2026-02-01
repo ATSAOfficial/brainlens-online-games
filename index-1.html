@@ -114,10 +114,15 @@ header {
     <a class="back-btn" onclick="backToLocal()">
         <script>
 function backToLocal() {
-  if (window.Android) {
-    Android.backToLocal();
+  // Gunakan AndroidBridge, bukan Android
+  if (window.AndroidBridge) {
+    AndroidBridge.backToLocal();
+  } else {
+    // Fallback jika dibuka di browser biasa
+    window.location.href = "index.html"; 
   }
 }
+
 </script>
   <span class="arrow"></span>
 </a>
