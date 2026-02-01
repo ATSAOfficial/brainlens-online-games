@@ -3,7 +3,110 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link rel="stylesheet" href="./css/style-index-1.css">
+ 
+<style>
+body {
+      margin: 0;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      background-color: #000;
+      font-family: Arial, sans-serif;
+      
+    }
+
+    .scoreboard, .timer {
+      position: absolute;
+      top: 60px;
+      left: 20px;
+      font-size: 90%;
+      font-weight: bold;
+      
+    }
+    .scoreboard {
+        color: #00eaff;
+    }
+
+    .timer {
+      top: 90px;
+      color: #fff;
+    }
+
+    .game-area {
+      position: relative;
+      width: 70%;
+      height: 70%;
+    }
+
+    .target {
+    -webkit-appearance: none;
+     appearance: none;
+      position: absolute;
+      width: 50px;
+      height: 50px;
+      background-color: #c2c2c2;
+      border: 2px solid #000;
+      border-radius: 50%;
+      cursor: pointer;
+      transition: transform 0.2s ease, left 0.2s ease, top 0.2s ease;
+    }
+    
+* {
+  -webkit-tap-highlight-color: transparent;
+}
+
+header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 55px;
+  background: #0C0C10;
+  color: #c8c8c8;
+  display: flex;
+  align-items: center;
+  padding: 0 14px;
+  z-index: 9999;
+  
+}
+
+/* Biar logo & hamburger ngumpul rapi */
+.header-left {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.back-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 42px;
+    height: 42px;
+    
+    border-radius: 12px;
+    text-decoration: none;
+    margin: 10px;
+    transition: 0.15s;
+  }
+
+  .back-btn:active {
+    transform: scale(0.9);
+    opacity: 0.8;
+  }
+
+  .arrow {
+    display: inline-block;
+    width: 14px;
+    height: 14px;
+    border-left: 3px solid #c8c8c8;
+    border-bottom: 3px solid #c8c8c8;
+    transform: rotate(45deg) translate(1px, 1px);
+  }
+
+</style>
 </head>
 <body>
     <header>
@@ -24,6 +127,78 @@
 
 <audio id="clickSound" src="sound/woosh2.mp3" preload="auto"></audio>
   
-  <script src="./scripts/main-index-1.js"></script>
+  <script>
+const target = document.getElementById('target');
+    const scoreboard = document.getElementById('scoreboard');
+    const timerDisplay = document.getElementById('timer');
+    const gameArea = document.querySelector('.game-area');
+
+    let score = 0;
+    let time = 0;
+    let timerInterval;
+
+    // Ambil total poin dari localStorage (kalau ada)
+    let totalPoints = parseInt(localStorage.getItem("totalPoints")) || 0;
+
+    function startTimer() {
+      timerInterval = setInterval(() => {
+        time += 1;
+        timerDisplay.textContent = `Time: ${time}s`;
+      }, 1000);
+    }
+
+    function moveTarget() {
+      const maxX = gameArea.clientWidth - target.offsetWidth;
+      const maxY = gameArea.clientHeight - target.offsetHeight;
+      const randomX = Math.floor(Math.random() * maxX);
+      const randomY = Math.floor(Math.random() * maxY);
+
+      target.style.left = `${randomX}px`;
+      target.style.top = `${randomY}px`;
+      target.style.transform = `rotate(${Math.floor(Math.random() * 360)}deg)`;
+    }
+
+    function updateScore() {
+      score += 1;
+      totalPoints += 1;
+      scoreboard.textContent = `Points: ${score}`;
+      localStorage.setItem("totalPoints", totalPoints);
+    }
+
+    // Inisialisasi
+    moveTarget();
+    startTimer();
+
+    target.addEventListener('click', () => {
+      updateScore();
+      moveTarget();
+    });
+
+
+
+
+
+
+
+
+const sound = document.getElementById("clickSound");
+const buttons = document.querySelectorAll(".target");
+
+
+buttons.forEach(btn => {
+    btn.addEventListener("click", () => {
+
+        const url = btn.getAttribute("data-link");  // ambil tujuan
+
+        sound.currentTime = 0;
+        sound.play();
+
+        
+    });
+});
+
+
+
+</script>
 </body>
 </html>
